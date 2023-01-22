@@ -142,4 +142,6 @@ scene.setBackgroundImage(img`
 scene.centerCameraAt(0, 0)
 if (false && (false && false)) {
 	
+} else {
+	
 }
