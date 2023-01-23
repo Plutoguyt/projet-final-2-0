@@ -1,35 +1,28 @@
 namespace SpriteKind {
     export const coin = SpriteKind.create()
+    export const endStar = SpriteKind.create()
+    export const death = SpriteKind.create()
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (mySprite.vy == 0) {
         mySprite.vy = -150
     }
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.endStar, function (sprite, otherSprite) {
+    otherSprite.destroy()
+    game.over(true, effects.bubbles)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.coin, function (sprite, otherSprite) {
     info.changeScoreBy(1)
     otherSprite.destroy()
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.death, function (sprite, otherSprite) {
+    game.over(false, effects.hearts)
+})
+let death1: Sprite = null
+let endStar: Sprite = null
 let coin: Sprite = null
 let mySprite: Sprite = null
-let facingleft = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . f f f f f f . . . . . 
-    . . . . f 2 f e e e e f f . . . 
-    . . . f 2 2 2 f e e e e f f . . 
-    . . . f e e e e f f e e e f . . 
-    . . f e 2 2 2 2 e e f f f f . . 
-    . . f 2 e f f f f 2 2 2 e f . . 
-    . . f f f e e e f f f f f f f . 
-    . . f e e 4 4 f b e 4 4 e f f . 
-    . . . f e d d f 1 4 d 4 e e f . 
-    . . . . f d d d e e e e e f . . 
-    . . . . f e 4 e d d 4 f . . . . 
-    . . . . f 2 2 e d d e f . . . . 
-    . . . f f 5 5 f e e f f f . . . 
-    . . . f f f f f f f f f f . . . 
-    . . . . f f f . . . f f . . . . 
-    `, SpriteKind.Player)
 mySprite = sprites.create(img`
     . . . . . . f f f f . . . . . . 
     . . . . f f f 2 2 f f f . . . . 
@@ -196,13 +189,47 @@ for (let value of tiles.getTilesByType(assets.tile`myTile`)) {
     tiles.placeOnTile(coin, value)
     tiles.setTileAt(value, assets.tile`transparency16`)
 }
-game.onUpdate(function () {
-    if (mySprite.vx < 0) {
-    	
-    } else if (mySprite.vx > 0) {
-    	
-    }
-    if (true) {
-    	
-    }
-})
+for (let value of tiles.getTilesByType(assets.tile`myTile0`)) {
+    endStar = sprites.create(img`
+        1 1 . . . 1 . . 1 . . 1 . . 1 1 
+        . 1 . . . . . . . . . . . . 1 . 
+        . 1 1 . . f f f f f f f . 1 1 . 
+        . . 1 . f a a a a a a a f . . . 
+        . . . f a a 8 8 8 8 8 a a f . . 
+        1 . f a a 8 c c c c c 8 a a f . 
+        . . f a 8 c c a a a c c 8 a f 1 
+        . . f a 8 c a b b b a c 8 a f . 
+        1 . f a 8 c a b b b a c 8 a f 1 
+        . . f a 8 c a b b b a c 8 a f . 
+        . . f a 8 c c a a a c c 8 a f . 
+        1 . f a a 8 c c c c c 8 a a f 1 
+        . . . f a a 8 8 8 8 8 a a f . . 
+        . 1 1 . f a a a a a a a f . 1 . 
+        . 1 . . . f f f f f f f . 1 1 . 
+        1 1 . . . 1 . . 1 . . 1 . . 1 1 
+        `, SpriteKind.endStar)
+    tiles.placeOnTile(endStar, value)
+    tiles.setTileAt(value, assets.tile`transparency16`)
+}
+for (let value of tiles.getTilesByType(assets.tile`myTile3`)) {
+    death1 = sprites.create(img`
+        . . . . . 2 2 2 2 2 2 . . . . . 
+        . . . 2 2 . . . . . . 2 2 . . . 
+        . . 2 . . . . . . . . . . 2 . . 
+        . 2 . 2 . . . . . . . . 2 . 2 . 
+        . 2 . . 2 . . . . . . 2 . . 2 . 
+        2 . . . . 2 . . . . 2 . . . . 2 
+        2 . . . . . 2 . . 2 . . . . . 2 
+        2 . . . . . . 2 . . . . . . . 2 
+        2 . . . . . . . 2 . . . . . . 2 
+        2 . . . . . 2 . . 2 . . . . . 2 
+        2 . . . . 2 . . . . 2 . . . . 2 
+        . 2 . . 2 . . . . . . 2 . . 2 . 
+        . 2 . 2 . . . . . . . . 2 . 2 . 
+        . . 2 . . . . . . . . . . 2 . . 
+        . . . 2 2 . . . . . . 2 2 . . . 
+        . . . . . 2 2 2 2 2 2 . . . . . 
+        `, SpriteKind.death)
+    tiles.placeOnTile(death1, value)
+    tiles.setTileAt(value, assets.tile`transparency16`)
+}
